@@ -1,0 +1,109 @@
+release:
+  draft: false
+  prerelease: auto
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
+before:
+  hooks:
+    - go mod download
+builds:
+  - id: node-collector
+    main: ./cmd/node-collector/main.go
+    binary: node-collector
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    goarm:
+      - "7"
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    builds:
+      - node-collector
+    replacements:
+      amd64: x86_64
+      arm: ARM
+      arm64: ARM64
+    format_overrides:
+      - goos: windows
+        format: zip
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .FullCommit }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs'
+      - '^test'
+      - '^release'
+dockers:
+  - image_templates:
+      - "ghcr.io/aquasecurity/node-collector:{{ .Version }}-amd64"
+    use: buildx
+    goos: linux
+    dockerfile: build/node-collector/Dockerfile
+    goarch: amd64
+    ids:
+      - node-collector
+    build_flag_templates:
+      - "--label=org.opencontainers.image.title=node-collector"
+      - "--label=org.opencontainers.image.description=collect node info"
+      - "--label=org.opencontainers.image.vendor=Aqua Security"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.source=https://github.com/aquasecurity/node-collector"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.documentation=https://aquasecurity.github.io/node-collector/v{{ .Version }}/"
+      - "--platform=linux/amd64"
+  - image_templates:
+      - "ghcr.io/aquasecurity/node-collector:{{ .Version }}-arm64"
+    use: buildx
+    goos: linux
+    dockerfile: build/node-collector/Dockerfile
+    goarch: arm64
+    ids:
+      - node-collector
+    build_flag_templates:
+      - "--label=org.opencontainers.image.title=node-collector"
+      - "--label=org.opencontainers.image.description=Keeps node-collector resources updated"
+      - "--label=org.opencontainers.image.vendor=Aqua Security"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.source=https://github.com/aquasecurity/node-collector"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.documentation=https://aquasecurity.github.io/node-collector/v{{ .Version }}/"
+      - "--platform=linux/arm64"
+docker_manifests:
+  - name_template: "aquasec/node-collector:{{ .Version }}"
+    image_templates:
+      - "aquasec/node-collector:{{ .Version }}-amd64"
+      - "aquasec/node-collector:{{ .Version }}-arm64"
+  - name_template: "ghcr.io/aquasecurity/node-collector:{{ .Version }}"
+    image_templates:
+      - "ghcr.io/aquasecurity/node-collector:{{ .Version }}-amd64"
+      - "ghcr.io/aquasecurity/node-collector:{{ .Version }}-arm64"
+signs:
+  - cmd: cosign
+    signature: "${artifact}.sig"
+    certificate: "${artifact}.pem"
+    args:
+      - "sign-blob"
+      - "--oidc-issuer=https://token.actions.githubusercontent.com"
+      - "--output-certificate=${certificate}"
+      - "--output-signature=${signature}"
+      - "${artifact}"
+    artifacts: all
+    output: true
+
+docker_signs:
+  - cmd: cosign
+    args:
+      - "sign"
+      - "--oidc-issuer=https://token.actions.githubusercontent.com"
+      - "${artifact}"
+    artifacts: all
+    output: true
