@@ -2,18 +2,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: node-info
+  name: node-collector
 spec:
   template:
     metadata:
       labels:
-        app: node-info
+        app: node-collector
     spec:
       hostPID: true
       containers:
-        - name: node-info
-          image: chenkeinan/node-info:latest
-          command: ["node-info"]
+        - name: node-collector
+          image: chenkeinan/node-collector:latest
+          command: ["node-collector"]
           volumeMounts:
             - name: var-lib-etcd
               mountPath: /var/lib/etcd
