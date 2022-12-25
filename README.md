@@ -222,3 +222,9 @@ kubectl logs node-collector-ng2z7
 kubectl delete -f job.yaml
 ```
 
+[release-img]: https://img.shields.io/github/release/aquasecurity/k8s-node-collector.svg?logo=github
+[release]: https://github.com/aquasecurity/k8s-node-collector/releases
+[action-build-img]: https://github.com/aquasecurity/k8s-node-collector/actions/workflows/build.yaml/badge.svg
+[action-build]: https://github.com/aquasecurity/k8s-node-collector/actions/workflows/build.yaml
+[action-release-snapshot-img]: https://github.com/aquasecurity/k8s-node-collector/actions/workflows/release-snapshot.yaml/badge.svg
+[action-release-snapshot]: https://github.com/aquasecurity/k8s-node-collector/actions/workflows/release-snapshot.yaml
