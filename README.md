@@ -1,10 +1,10 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/aquasecurity/k8s-node-collector/blob/main/LICENSE)
 
-# kube-node-collector
+# k8s-node-collector
 
-Kube-Node-collector is an open source collector who collect Node information (fs and process data) and output in a table/json format.
+k8s-Node-collector is an open source collector who collect Node information (fs and process data) and output in a table/json format.
 
-## Kube-node-collector as job in k8s
+## k8s-node-collector as job in k8s
 
 - simple k8s cluster run following job
 
