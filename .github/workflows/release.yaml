@@ -31,8 +31,6 @@ jobs:
         run: make test
   release:
     name: Release
-    needs:
-      - itest-trivy-operator
     runs-on: ubuntu-20.04
     env:
       DOCKER_CLI_EXPERIMENTAL: enabled
