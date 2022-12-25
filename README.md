@@ -1,3 +1,6 @@
+[![GitHub Release][release-img]][release]
+[![Build Action][action-build-img]][action-build]
+[![Release snapshot Action][action-release-snapshot-img]][action-release-snapshot]
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/aquasecurity/k8s-node-collector/blob/main/LICENSE)
 
 # k8s-node-collector
