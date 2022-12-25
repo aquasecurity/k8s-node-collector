@@ -1,4 +1,4 @@
-module github.com/chen-keinan/k8s-node-info
+module github.com/chen-keinan/k8s-node-collector
 
 go 1.19
 

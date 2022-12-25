@@ -1,5 +1,5 @@
 FROM alpine:3.16.2
 
-COPY node-info /usr/local/bin/node-info
+COPY node-collector /usr/local/bin/node-collector
 
-ENTRYPOINT ["node-info"]
+ENTRYPOINT ["node-collector"]
