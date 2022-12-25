@@ -1,0 +1,14 @@
+---
+linters:
+  disable:
+    - structcheck
+  enable:
+    - errorlint
+    - gocritic
+    - gosec
+linters-settings:
+  gocritic:
+    enabled-checks:
+      - importShadow
+run:
+  timeout: 5m

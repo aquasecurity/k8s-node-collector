@@ -1,0 +1,6 @@
+---
+blank_issues_enabled: false
+contact_links:
+  - name: Support Question
+    url: https://github.com/aquasecurity/k8s-node-collector/discussions
+    about: If you have a question about Trivy operator.
