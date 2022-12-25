@@ -21,4 +21,4 @@ output/*
 *.iml
 ## yamllint logfile
 yamllint-*
-node-collector
+./node-collector
