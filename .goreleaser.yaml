@@ -78,10 +78,6 @@ dockers:
       - "--label=org.opencontainers.image.documentation=https://aquasecurity.github.io/node-collector/v{{ .Version }}/"
       - "--platform=linux/arm64"
 docker_manifests:
-  - name_template: "aquasec/node-collector:{{ .Version }}"
-    image_templates:
-      - "aquasec/node-collector:{{ .Version }}-amd64"
-      - "aquasec/node-collector:{{ .Version }}-arm64"
   - name_template: "ghcr.io/aquasecurity/node-collector:{{ .Version }}"
     image_templates:
       - "ghcr.io/aquasecurity/node-collector:{{ .Version }}-amd64"
