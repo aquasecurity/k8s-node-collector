@@ -22,3 +22,4 @@ output/*
 ## yamllint logfile
 yamllint-*
 ./node-collector
+./cmd/node-collector/node-collector
