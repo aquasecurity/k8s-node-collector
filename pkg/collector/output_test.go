@@ -48,7 +48,8 @@ func TestPrintOutput(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			buff := bytes.NewBuffer([]byte{})
-			printOutput(tt.nodeData, tt.format, buff)
+			err := printOutput(tt.nodeData, tt.format, buff)
+			assert.NoError(t, err)
 			b, err := os.ReadFile(tt.wantOutputFile)
 			assert.NoError(t, err)
 			assert.Equal(t, buff.String(), string(b))
