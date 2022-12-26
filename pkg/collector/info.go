@@ -12,7 +12,7 @@ const (
 	// Version resource version
 	Version = "v1"
 	// Kind resource kind
-	Kind = "Nodeinfo"
+	Kind = "NodeInfo"
 )
 
 //go:embed config
