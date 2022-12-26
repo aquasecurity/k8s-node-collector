@@ -107,7 +107,7 @@ collectors:
     audit: output=`stat -c %a $(ps -ef | grep kube-proxy |grep 'kubeconfig' | grep
       -o 'kubeconfig=[^"]\S*' | awk -F "=" '{print $2}' |awk 'FNR <= 1')
       2>/dev/null` || echo $output
-  - key: kubeconfigFileExistsPermissions
+  - key: kubeconfigFileExistsOwnership
     title: Kubeconfig file exists ensure ownership
     nodeType: worker
     audit: output=`stat -c %U:%G $(ps -ef | grep kube-proxy |grep 'kubeconfig' |

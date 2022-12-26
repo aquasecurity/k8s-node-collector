@@ -28,10 +28,8 @@ func CollectNodeData(cmd *cobra.Command) error {
 			if err != nil {
 				fmt.Print(err)
 			}
-			filterdParts := StringToArray(output, ",")
-			if len(filterdParts) > 0 {
-				nodeInfo[ci.Key] = filterdParts
-			}
+			values := StringToArray(output, ",")
+			nodeInfo[ci.Key] = values
 		}
 		nodeData := Node{
 			APIVersion: Version,
