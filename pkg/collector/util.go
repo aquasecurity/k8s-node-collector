@@ -7,6 +7,9 @@ import (
 
 // StringToArray convert string with delimiter to array
 func StringToArray(output string, delimiter string) []interface{} {
+	if len(output) == 0 {
+		return []interface{}{}
+	}
 	outputParts := strings.Split(output, delimiter)
 	filterdParts := make([]interface{}, 0)
 	for _, part := range outputParts {
