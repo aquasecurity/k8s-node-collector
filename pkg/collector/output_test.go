@@ -23,10 +23,10 @@ func TestPrintOutput(t *testing.T) {
 				APIVersion: Version,
 				Type:       MasterNode,
 				Kind:       "NodeInfo",
-				Info: map[string]interface{}{
-					"AdminConfFilePermissions":                 []interface{}{600},
-					"CertificateAuthoritiesFilePermissions":    []interface{}{"root:root"},
-					"ContainerNetworkInterfaceFilePermissions": []interface{}{700, 500},
+				Info: map[string]*Info{
+					"AdminConfFilePermissions":                 {Values: []interface{}{600}},
+					"CertificateAuthoritiesFilePermissions":    {Values: []interface{}{"root:root"}},
+					"ContainerNetworkInterfaceFilePermissions": {Values: []interface{}{700, 500}},
 				},
 			},
 		},
@@ -38,8 +38,8 @@ func TestPrintOutput(t *testing.T) {
 				APIVersion: Version,
 				Type:       MasterNode,
 				Kind:       "NodeInfo",
-				Info: map[string]interface{}{
-					"ContainerNetworkInterfaceFilePermissions": []interface{}{700, 500},
+				Info: map[string]*Info{
+					"ContainerNetworkInterfaceFilePermissions": {Values: []interface{}{700, 500}},
 				},
 			},
 		},

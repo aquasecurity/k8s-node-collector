@@ -19,7 +19,7 @@ func CollectNodeData(cmd *cobra.Command) error {
 		return err
 	}
 	for _, infoCollector := range infoCollectorMap {
-		nodeInfo := make(map[string]interface{})
+		nodeInfo := make(map[string]*Info)
 		for _, ci := range infoCollector.Collectors {
 			if ci.NodeType != nodeType && nodeType != MasterNode {
 				continue
@@ -29,7 +29,7 @@ func CollectNodeData(cmd *cobra.Command) error {
 				fmt.Print(err)
 			}
 			values := StringToArray(output, ",")
-			nodeInfo[ci.Key] = values
+			nodeInfo[ci.Key] = &Info{Values: values}
 		}
 		nodeData := Node{
 			APIVersion: Version,

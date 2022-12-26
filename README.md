@@ -38,185 +38,275 @@ kubectl logs node-collector-ng2z7
   "kind": "NodeInfo",
   "type": "master",
   "info": {
-    "adminConfFileOwnership": [
-      "root:root"
-    ],
-    "adminConfFilePermissions": [
-      600
-    ],
-    "certificateAuthoritiesFileOwnership": [
-      "root:root"
-    ],
-    "certificateAuthoritiesFilePermissions": [
-      644
-    ],
-    "containerNetworkInterfaceFileOwnership": [
-      "root:root",
-      "root:root"
-    ],
-    "containerNetworkInterfaceFilePermissions": [
-      700,
-      775
-    ],
-    "controllerManagerConfFileOwnership": [
-      "root:root"
-    ],
-    "controllerManagerConfFilePermissions": [
-      600
-    ],
-    "etcdDataDirectoryOwnership": [
-      "root:root"
-    ],
-    "etcdDataDirectoryPermissions": [
-      700
-    ],
-    "kubeAPIServerSpecFileOwnership": [
-      "root:root"
-    ],
-    "kubeAPIServerSpecFilePermission": [
-      600
-    ],
-    "kubeControllerManagerSpecFileOwnership": [
-      "root:root"
-    ],
-    "kubeControllerManagerSpecFilePermission": [
-      600
-    ],
-    "kubeEtcdSpecFileOwnership": [
-      "root:root"
-    ],
-    "kubeEtcdSpecFilePermission": [
-      600
-    ],
-    "kubePKIDirectoryFileOwnership": [
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root",
-      "root:root"
-    ],
-    "kubePKIKeyFilePermissions": [
-      600,
-      600,
-      600,
-      600,
-      600,
-      600,
-      600,
-      600,
-      600,
-      600,
-      600
-    ],
-    "kubeSchedulerSpecFileOwnership": [
-      "root:root"
-    ],
-    "kubeSchedulerSpecFilePermission": [
-      600
-    ],
-    "kubeconfigFileExistsOwnership": [
+    "adminConfFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "adminConfFilePermissions": {
+      "values": [
+        600
+      ]
+    },
+    "certificateAuthoritiesFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "certificateAuthoritiesFilePermissions": {
+      "values": [
+        644
+      ]
+    },
+    "containerNetworkInterfaceFileOwnership": {
+      "values": [
+        "root:root",
+        "root:root"
+      ]
+    },
+    "containerNetworkInterfaceFilePermissions": {
+      "values": [
+        700,
+        775
+      ]
+    },
+    "controllerManagerConfFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "controllerManagerConfFilePermissions": {
+      "values": [
+        600
+      ]
+    },
+    "etcdDataDirectoryOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "etcdDataDirectoryPermissions": {
+      "values": [
+        700
+      ]
+    },
+    "kubeAPIServerSpecFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeAPIServerSpecFilePermission": {
+      "values": [
+        600
+      ]
+    },
+    "kubeControllerManagerSpecFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeControllerManagerSpecFilePermission": {
+      "values": [
+        600
+      ]
+    },
+    "kubeEtcdSpecFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeEtcdSpecFilePermission": {
+      "values": [
+        600
+      ]
+    },
+    "kubePKIDirectoryFileOwnership": {
+      "values": [
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root",
+        "root:root"
+      ]
+    },
+    "kubePKIKeyFilePermissions": {
+      "values": [
+        600,
+        600,
+        600,
+        600,
+        600,
+        600,
+        600,
+        600,
+        600,
+        600,
+        600
+      ]
+    },
+    "kubeSchedulerSpecFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeSchedulerSpecFilePermission": {
+      "values": [
+        600
+      ]
+    },
+    "kubeconfigFileExistsOwnership": {
+      "values": [
 
-    ],
-    "kubeconfigFileExistsPermissions": [
+      ]
+    },
+    "kubeconfigFileExistsPermissions": {
+      "values": [
 
-    ],
-    "kubeletAnonymousAuthArgumentSet": [
+      ]
+    },
+    "kubeletAnonymousAuthArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletAuthorizationModeArgumentSet": [
-      "Node",
-      "RBAC"
-    ],
-    "kubeletClientCaFileArgumentSet": [
-      "/etc/kubernetes/pki/ca.crt"
-    ],
-    "kubeletConfFileOwnership": [
-      "root:root"
-    ],
-    "kubeletConfFilePermissions": [
-      600
-    ],
-    "kubeletConfigYamlConfigurationFileOwnership": [
-      "root:root"
-    ],
-    "kubeletConfigYamlConfigurationFilePermission": [
-      644
-    ],
-    "kubeletEventQpsArgumentSet": [
+      ]
+    },
+    "kubeletAuthorizationModeArgumentSet": {
+      "values": [
+        "Node",
+        "RBAC"
+      ]
+    },
+    "kubeletClientCaFileArgumentSet": {
+      "values": [
+        "/etc/kubernetes/pki/ca.crt"
+      ]
+    },
+    "kubeletConfFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeletConfFilePermissions": {
+      "values": [
+        600
+      ]
+    },
+    "kubeletConfigYamlConfigurationFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeletConfigYamlConfigurationFilePermission": {
+      "values": [
+        644
+      ]
+    },
+    "kubeletEventQpsArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletHostnameOverrideArgumentSet": [
+      ]
+    },
+    "kubeletHostnameOverrideArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletMakeIptablesUtilChainsArgumentSet": [
+      ]
+    },
+    "kubeletMakeIptablesUtilChainsArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletOnlyUseStrongCryptographic": [
+      ]
+    },
+    "kubeletOnlyUseStrongCryptographic": {
+      "values": [
 
-    ],
-    "kubeletProtectKernelDefaultsArgumentSet": [
+      ]
+    },
+    "kubeletProtectKernelDefaultsArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletReadOnlyPortArgumentSet": [
+      ]
+    },
+    "kubeletReadOnlyPortArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletRotateCertificatesArgumentSet": [
+      ]
+    },
+    "kubeletRotateCertificatesArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletRotateKubeletServerCertificateArgumentSet": [
+      ]
+    },
+    "kubeletRotateKubeletServerCertificateArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletServiceFileOwnership": [
-      "root:root"
-    ],
-    "kubeletServiceFilePermissions": [
-      644
-    ],
-    "kubeletStreamingConnectionIdleTimeoutArgumentSet": [
+      ]
+    },
+    "kubeletServiceFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "kubeletServiceFilePermissions": {
+      "values": [
+        644
+      ]
+    },
+    "kubeletStreamingConnectionIdleTimeoutArgumentSet": {
+      "values": [
 
-    ],
-    "kubeletTlsCertFileTlsArgumentSet": [
-      "/etc/kubernetes/pki/apiserver.crt"
-    ],
-    "kubeletTlsPrivateKeyFileArgumentSet": [
-      "/etc/kubernetes/pki/apiserver.key"
-    ],
-    "kubernetesPKICertificateFilePermissions": [
-      644,
-      644,
-      644,
-      644,
-      644,
-      644,
-      644,
-      644,
-      644,
-      644
-    ],
-    "schedulerConfFileOwnership": [
-      "root:root"
-    ],
-    "schedulerConfFilePermissions": [
-      600
-    ]
+      ]
+    },
+    "kubeletTlsCertFileTlsArgumentSet": {
+      "values": [
+        "/etc/kubernetes/pki/apiserver.crt"
+      ]
+    },
+    "kubeletTlsPrivateKeyFileArgumentSet": {
+      "values": [
+        "/etc/kubernetes/pki/apiserver.key"
+      ]
+    },
+    "kubernetesPKICertificateFilePermissions": {
+      "values": [
+        644,
+        644,
+        644,
+        644,
+        644,
+        644,
+        644,
+        644,
+        644,
+        644
+      ]
+    },
+    "schedulerConfFileOwnership": {
+      "values": [
+        "root:root"
+      ]
+    },
+    "schedulerConfFilePermissions": {
+      "values": [
+        600
+      ]
+    }
   }
 }
 ```

@@ -66,8 +66,13 @@ func getSpecInfo(info string) (*SpecInfo, error) {
 
 // Node output node data with info results
 type Node struct {
-	APIVersion string                 `json:"apiVersion"`
-	Kind       string                 `json:"kind"`
-	Type       string                 `json:"type"`
-	Info       map[string]interface{} `json:"info"`
+	APIVersion string           `json:"apiVersion"`
+	Kind       string           `json:"kind"`
+	Type       string           `json:"type"`
+	Info       map[string]*Info `json:"info"`
+}
+
+// Info comand output result
+type Info struct {
+	Values interface{} `json:"values"`
 }

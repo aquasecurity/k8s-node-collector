@@ -22,7 +22,7 @@ func printOutput(nodeData Node, output string, writer io.Writer) error {
 		data := make([][]string, 0)
 		for key, ndata := range nodeData.Info {
 			var results []string
-			v, ok := ndata.([]interface{})
+			v, ok := ndata.Values.([]interface{})
 			if !ok {
 				return fmt.Errorf("type not supported")
 			}
