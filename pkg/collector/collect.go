@@ -9,6 +9,7 @@ import (
 
 // CollectNodeData run spec audit command and output it result data
 func CollectNodeData(cmd *cobra.Command) error {
+	specVersion := cmd.Flag("spec").Value.String()
 	shellCmd := NewShellCmd()
 	nodeType, err := shellCmd.FindNodeType()
 	if err != nil {
@@ -20,6 +21,9 @@ func CollectNodeData(cmd *cobra.Command) error {
 	}
 	for _, infoCollector := range infoCollectorMap {
 		nodeInfo := make(map[string]*Info)
+		if infoCollector.Version != specVersion {
+			continue
+		}
 		for _, ci := range infoCollector.Collectors {
 			if ci.NodeType != nodeType && nodeType != MasterNode {
 				continue
