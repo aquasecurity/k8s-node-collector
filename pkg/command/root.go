@@ -10,6 +10,7 @@ import (
 
 func init() {
 	rootCmd.PersistentFlags().StringP("output", "o", "json", "Output format. One of table|json")
+	rootCmd.PersistentFlags().StringP("spec", "s", "1.0", "spec version: 1.0")
 }
 
 var rootCmd = &cobra.Command{
