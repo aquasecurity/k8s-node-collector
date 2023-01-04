@@ -3,6 +3,7 @@ package collector
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -39,6 +40,7 @@ func CollectNodeData(cmd *cobra.Command) error {
 			APIVersion: Version,
 			Kind:       Kind,
 			Type:       nodeType,
+			Metadata:   map[string]string{"creationTimestamp": time.Now().Format(time.RFC3339)},
 			Info:       nodeInfo,
 		}
 		outputFormat := cmd.Flag("output").Value.String()
