@@ -15,7 +15,7 @@ k8s-Node-collector is an open source collector who collect Node information (fs 
 kubectl apply -f job.yaml
 ```
 
-* Check k8s pod status
+- Check k8s pod status
 
 ```
 kubectl get pods 
@@ -24,18 +24,21 @@ NAME                                     READY   STATUS      RESTARTS   AGE
 node-collector-ng2z7                          0/1     Completed   0          6m13s
 ```
 
-* Check k8s pod audit output
+- Check k8s pod audit output
 
 ```
 kubectl logs node-collector-ng2z7
 ```
 
-* json output
+- json output
 
 ```json
 {
   "apiVersion": "v1",
   "kind": "NodeInfo",
+  "metadata":{
+    "creationTimestamp":"2023-01-04T11:37:11+02:00"
+    },
   "type": "master",
   "info": {
     "adminConfFileOwnership": {
@@ -310,7 +313,9 @@ kubectl logs node-collector-ng2z7
   }
 }
 ```
+
 * job cleanup
+
 ```
 kubectl delete -f job.yaml
 ```
