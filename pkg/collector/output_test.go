@@ -2,6 +2,7 @@ package collector
 
 import (
 	"bytes"
+
 	"os"
 	"testing"
 
@@ -22,6 +23,7 @@ func TestPrintOutput(t *testing.T) {
 			nodeData: Node{
 				APIVersion: Version,
 				Type:       MasterNode,
+				Metadata:   map[string]string{"creationTimestamp": "now"},
 				Kind:       "NodeInfo",
 				Info: map[string]*Info{
 					"AdminConfFilePermissions":                 {Values: []interface{}{600}},
