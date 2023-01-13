@@ -60,7 +60,9 @@ func (e *cmd) FindNodeType() (string, error) {
 		outputParts := strings.Split(output, ",")
 		if len(outputParts) > 0 {
 			for _, part := range outputParts {
-				if (len(strings.TrimSpace(part)) != 0 && !strings.Contains(path, part)) || err != nil {
+				if (len(strings.TrimSpace(part)) != 0 && !strings.Contains(path, strings.TrimSpace(part))) ||
+					len(strings.TrimSpace(part)) == 0 ||
+					err != nil {
 					return WorkerNode, nil
 				}
 			}
