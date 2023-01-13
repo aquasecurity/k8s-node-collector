@@ -1,7 +1,6 @@
 package collector
 
 import (
-	"fmt"
 	"os/exec"
 	"strings"
 )
@@ -40,7 +39,6 @@ func (e *cmd) Execute(commandArgs string) (string, error) {
 	cm := exec.Command(shellCommand, "-c", commandArgs)
 	output, err := cm.CombinedOutput()
 	if err != nil {
-		fmt.Println(fmt.Sprint(err) + ": " + string(output))
 		return "", nil
 	}
 	// trim newline
@@ -57,7 +55,7 @@ func (e *cmd) FindNodeType() (string, error) {
 	for _, path := range masterConfigFiles {
 		output, err := e.Execute(path)
 		if err != nil {
-			return "", err
+			return WorkerNode, nil
 		}
 		outputParts := strings.Split(output, ",")
 		if len(outputParts) > 0 {
