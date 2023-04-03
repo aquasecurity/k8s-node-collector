@@ -1,4 +1,4 @@
-FROM alpine:3.16.2
+FROM alpine:20230329
 
 COPY node-collector /usr/local/bin/node-collector
 
