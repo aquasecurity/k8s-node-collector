@@ -42,6 +42,7 @@ func LoadConfig() (map[string]*SpecInfo, error) {
 // SpecInfo spec info with require comand to collect
 type SpecInfo struct {
 	Version    string      `yaml:"version"`
+	Platfrom   string      `yaml:"platfrom"`
 	Name       string      `yaml:"name"`
 	Title      string      `yaml:"title"`
 	Collectors []Collector `yaml:"collectors"`
