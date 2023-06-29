@@ -20,8 +20,8 @@ var platfromSpec = map[string]SpecVersion{
 	},
 }
 
-// CollectNodeData run spec audit command and output it result data
-func CollectNodeData(cmd *cobra.Command, target string) error {
+// CollectData run spec audit command and output it result data
+func CollectData(cmd *cobra.Command, target string) error {
 	cluster, err := GetCluster()
 	if err != nil {
 		return err
