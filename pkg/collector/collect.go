@@ -14,14 +14,14 @@ type SpecVersion struct {
 }
 
 var platfromSpec = map[string]SpecVersion{
-	"k8s-1.23": SpecVersion{
+	"k8s-1.23": {
 		Name:    "cis",
 		Version: "1.23",
 	},
 }
 
 // CollectNodeData run spec audit command and output it result data
-func CollectNodeData(cmd *cobra.Command) error {
+func CollectNodeData(cmd *cobra.Command, target string) error {
 	cluster, err := GetCluster()
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func CollectNodeData(cmd *cobra.Command) error {
 	if err != nil {
 		return err
 	}
-	infoCollectorMap, err := LoadConfig()
+	infoCollectorMap, err := LoadConfig(target)
 	if err != nil {
 		return err
 	}

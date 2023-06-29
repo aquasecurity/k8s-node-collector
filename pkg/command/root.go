@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aquasecurity/k8s-node-collector/pkg/collector"
 	"github.com/spf13/cobra"
 )
 
@@ -16,11 +15,11 @@ func init() {
 
 var rootCmd = &cobra.Command{
 	Use:   "node-collector",
-	Short: "k8s-node-collector extract file system info from cluster Node",
-	Long:  `A tool which provide a way to extract k8s info which is not accessible via apiserver from node cluster based on pre-define commands`,
+	Short: "trivy-collector extract file system info",
+	Long:  `A tool which provide a way to extract file info which is not accessible via pre-define commands`,
 	RunE: func() func(cmd *cobra.Command, args []string) error {
 		return func(cmd *cobra.Command, args []string) error {
-			return collector.CollectNodeData(cmd)
+			return cmd.Help()
 		}
 	}(),
 }
