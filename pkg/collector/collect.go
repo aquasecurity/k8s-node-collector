@@ -8,21 +8,46 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// CollectNodeData run spec audit command and output it result data
-func CollectNodeData(cmd *cobra.Command) error {
-	specVersion := cmd.Flag("spec").Value.String()
+type SpecVersion struct {
+	Name    string
+	Version string
+}
+
+var platfromSpec = map[string]SpecVersion{
+	"k8s-1.23": {
+		Name:    "cis",
+		Version: "1.23",
+	},
+}
+
+// CollectData run spec audit command and output it result data
+func CollectData(cmd *cobra.Command, target string) error {
+	cluster, err := GetCluster()
+	if err != nil {
+		return err
+	}
+	p, err := cluster.Platfrom()
+	if err != nil {
+		return err
+	}
 	shellCmd := NewShellCmd()
 	nodeType, err := shellCmd.FindNodeType()
 	if err != nil {
 		return err
 	}
-	infoCollectorMap, err := LoadConfig()
+	infoCollectorMap, err := LoadConfig(target)
 	if err != nil {
 		return err
 	}
+	specName := cmd.Flag("spec").Value.String()
+	specVersion := cmd.Flag("version").Value.String()
+	sv := SpecVersion{Name: specName, Version: specVersion}
+	if len(sv.Name) == 0 || len(sv.Version) == 0 {
+		sv = specByPlatfromVersion(p.Name, p.Version)
+	}
 	for _, infoCollector := range infoCollectorMap {
 		nodeInfo := make(map[string]*Info)
-		if infoCollector.Version != specVersion {
+		if !(infoCollector.Version == sv.Version && infoCollector.Name == sv.Name) {
 			continue
 		}
 		for _, ci := range infoCollector.Collectors {
@@ -50,4 +75,8 @@ func CollectNodeData(cmd *cobra.Command) error {
 		}
 	}
 	return nil
+}
+
+func specByPlatfromVersion(platfrom string, version string) SpecVersion {
+	return platfromSpec[fmt.Sprintf("%s-%s", platfrom, platfrom)]
 }

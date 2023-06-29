@@ -19,14 +19,15 @@ const (
 var config embed.FS
 
 // LoadConfig load audit commands specification from config file
-func LoadConfig() (map[string]*SpecInfo, error) {
-	dirEntries, err := config.ReadDir(configFolder)
+func LoadConfig(target string) (map[string]*SpecInfo, error) {
+	fullPath := fmt.Sprintf("%s/%s", configFolder, target)
+	dirEntries, err := config.ReadDir(fullPath)
 	if err != nil {
 		return nil, err
 	}
 	specInfoMap := make(map[string]*SpecInfo)
 	for _, entry := range dirEntries {
-		fContent, err := config.ReadFile(fmt.Sprintf("%s/%s", configFolder, entry.Name()))
+		fContent, err := config.ReadFile(fmt.Sprintf("%s/%s", fullPath, entry.Name()))
 		if err != nil {
 			return nil, err
 		}

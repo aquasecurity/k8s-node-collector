@@ -1,6 +1,6 @@
 ---
-version: "1.0"
-name: node-info-collector
+version: "1.23"
+name: cis
 title: Node Specification for info collector
 collectors:
   - key: kubeAPIServerSpecFilePermission
