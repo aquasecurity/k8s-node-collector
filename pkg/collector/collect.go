@@ -1,12 +1,26 @@
 package collector
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/spf13/cobra"
 )
+
+var configMapper = map[string]string{
+	"kubeletAnonymousAuthArgumentSet":                  "authentication.anonymous.enabled",
+	"kubeletAuthorizationModeArgumentSet":              "authorization.mode",
+	"kubeletClientCaFileArgumentSet":                   "authentication.x509.clientCAFile",
+	"kubeletReadOnlyPortArgumentSet":                   "readOnlyPort",
+	"kubeletStreamingConnectionIdleTimeoutArgumentSet": "streamingConnectionIdleTimeout",
+	"kubeletProtectKernelDefaultsArgumentSet":          "kernelMemcgNotification",
+	"kubeletMakeIptablesUtilChainsArgumentSet":         "makeIPTablesUtilChains",
+	"kubeletEventQpsArgumentSet":                       "eventRecordQPS",
+	"kubeletRotateKubeletServerCertificateArgumentSet": "featureGates.RotateKubeletServerCertificate",
+}
 
 type SpecVersion struct {
 	Name    string
@@ -61,6 +75,12 @@ func CollectData(cmd *cobra.Command, target string) error {
 			values := StringToArray(output, ",")
 			nodeInfo[ci.Key] = &Info{Values: values}
 		}
+		nodeName := cmd.Flag("node").Value.String()
+		configVal, err := getValuesFromkubeletConfig(nodeName, *cluster)
+		if err != nil {
+			return err
+		}
+		mergeConfigValues(nodeInfo, configVal)
 		nodeData := Node{
 			APIVersion: Version,
 			Kind:       Kind,
@@ -69,7 +89,7 @@ func CollectData(cmd *cobra.Command, target string) error {
 			Info:       nodeInfo,
 		}
 		outputFormat := cmd.Flag("output").Value.String()
-		err := printOutput(nodeData, outputFormat, os.Stdout)
+		err = printOutput(nodeData, outputFormat, os.Stdout)
 		if err != nil {
 			return err
 		}
@@ -79,4 +99,37 @@ func CollectData(cmd *cobra.Command, target string) error {
 
 func specByPlatfromVersion(platfrom string, version string) SpecVersion {
 	return platfromSpec[fmt.Sprintf("%s-%s", platfrom, platfrom)]
+}
+
+func getValuesFromkubeletConfig(nodeName string, cluster Cluster) (map[string]*Info, error) {
+	overrideConfig := make(map[string]*Info)
+	data, err := cluster.clientSet.RESTClient().Get().AbsPath(fmt.Sprintf("/api/v1/nodes/%s/proxy/configz", nodeName)).DoRaw(context.TODO())
+	if err != nil {
+		return nil, err
+	}
+	nodeConfig := make(map[string]interface{})
+	err = json.Unmarshal(data, &nodeConfig)
+	if err != nil {
+		return nil, err
+	}
+	values := nodeConfig["kubeletconfig"]
+	for k, v := range configMapper {
+		p := values
+		splittedValues := StringToArray(v, ".")
+		for _, sv := range splittedValues {
+			next := p.(map[string]interface{})
+			if k, ok := next[sv.(string)]; ok {
+				p = k
+			}
+		}
+		overrideConfig[k] = &Info{Values: []interface{}{p}}
+	}
+	return overrideConfig, nil
+}
+
+func mergeConfigValues(configValues map[string]*Info, overrideConfig map[string]*Info) map[string]*Info {
+	for k, v := range overrideConfig {
+		configValues[k] = v
+	}
+	return configValues
 }
