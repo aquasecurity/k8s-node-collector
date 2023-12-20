@@ -3,7 +3,9 @@ package collector
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -36,10 +38,19 @@ var platfromSpec = map[string]SpecVersion{
 
 // CollectData run spec audit command and output it result data
 func CollectData(cmd *cobra.Command, target string) error {
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 	cluster, err := GetCluster()
 	if err != nil {
 		return err
 	}
+	ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(10)*time.Minute)
+	defer cancel()
+
+	defer func() {
+		if errors.Is(err, context.DeadlineExceeded) {
+			log.Println("Increase --timeout value")
+		}
+	}()
 	p, err := cluster.Platfrom()
 	if err != nil {
 		return err
@@ -76,7 +87,7 @@ func CollectData(cmd *cobra.Command, target string) error {
 			nodeInfo[ci.Key] = &Info{Values: values}
 		}
 		nodeName := cmd.Flag("node").Value.String()
-		configVal, err := getValuesFromkubeletConfig(nodeName, *cluster)
+		configVal, err := getValuesFromkubeletConfig(ctx, nodeName, *cluster)
 		if err != nil {
 			return err
 		}
@@ -101,9 +112,9 @@ func specByPlatfromVersion(platfrom string, version string) SpecVersion {
 	return platfromSpec[fmt.Sprintf("%s-%s", platfrom, platfrom)]
 }
 
-func getValuesFromkubeletConfig(nodeName string, cluster Cluster) (map[string]*Info, error) {
+func getValuesFromkubeletConfig(ctx context.Context, nodeName string, cluster Cluster) (map[string]*Info, error) {
 	overrideConfig := make(map[string]*Info)
-	data, err := cluster.clientSet.RESTClient().Get().AbsPath(fmt.Sprintf("/api/v1/nodes/%s/proxy/configz", nodeName)).DoRaw(context.TODO())
+	data, err := cluster.clientSet.RESTClient().Get().AbsPath(fmt.Sprintf("/api/v1/nodes/%s/proxy/configz", nodeName)).DoRaw(ctx)
 	if err != nil {
 		return nil, err
 	}
