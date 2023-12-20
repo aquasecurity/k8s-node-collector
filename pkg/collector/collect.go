@@ -133,6 +133,8 @@ func getValuesFromkubeletConfig(ctx context.Context, nodeName string, cluster Cl
 			if k, ok := next[sv.(string)]; ok {
 				found = true
 				p = k
+			} else {
+				found = false
 			}
 		}
 		if found {
