@@ -37,19 +37,22 @@ func GetCluster() (*Cluster, error) {
 	cf := genericclioptions.NewConfigFlags(true)
 	rest.SetDefaultWarningHandler(rest.NoWarnings{})
 	clientConfig := cf.ToRawKubeConfigLoader()
-	rc, err := clientConfig.ClientConfig()
-	if err != nil {
-		return nil, err
-	}
 	restMapper, err := cf.ToRESTMapper()
 	if err != nil {
 		return nil, err
 	}
-	clientset, err := kubernetes.NewForConfig(rc)
+	// creates the in-cluster config
+	config, err := rest.InClusterConfig()
 	if err != nil {
 		return nil, err
 	}
-	k8sDynamicClient, err := dynamic.NewForConfig(rc)
+	// creates the clientset
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	k8sDynamicClient, err := dynamic.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
