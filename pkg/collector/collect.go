@@ -126,14 +126,20 @@ func getValuesFromkubeletConfig(ctx context.Context, nodeName string, cluster Cl
 	values := nodeConfig["kubeletconfig"]
 	for k, v := range configMapper {
 		p := values
+		var found bool
 		splittedValues := StringToArray(v, ".")
 		for _, sv := range splittedValues {
 			next := p.(map[string]interface{})
 			if k, ok := next[sv.(string)]; ok {
+				found = true
 				p = k
+			} else {
+				found = false
 			}
 		}
-		overrideConfig[k] = &Info{Values: []interface{}{p}}
+		if found {
+			overrideConfig[k] = &Info{Values: []interface{}{p}}
+		}
 	}
 	return overrideConfig, nil
 }

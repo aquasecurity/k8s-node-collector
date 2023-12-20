@@ -1,4 +1,42 @@
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-collector
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/proxy
+    verbs:
+      - get
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: node-collector
+  labels:
+    app.kubernetes.io/managed-by: kubectl
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: node-collector
+  labels:
+    app.kubernetes.io/version: 0.17.1
+    app.kubernetes.io/managed-by: kubectl
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: node-collector
+subjects:
+  - kind: ServiceAccount
+    name: node-collector
+    namespace: default
+
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,12 +47,31 @@ spec:
       labels:
         app: node-collector
     spec:
+      dnsPolicy: ClusterFirst
       hostPID: true
+      automountServiceAccountToken: true
+      serviceAccountName: node-collector
       containers:
         - name: node-collector
-          image: ghcr.io/aquasecurity/node-collector:0.0.9
-          command: ["node-collector"]
-          args: ["k8s", "--node", "minikube"]
+          image: ghcr.io/aquasecurity/node-collector:0.1.1
+          command:
+            - node-collector
+          args:
+            - k8s
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100M
+            requests:
+              cpu: 50m
+              memory: 50M
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+            readOnlyRootFilesystem: true
           volumeMounts:
             - name: var-lib-etcd
               mountPath: /var/lib/etcd
@@ -34,55 +91,40 @@ spec:
             - name: lib-systemd
               mountPath: /lib/systemd/
               readOnly: true
-            - name: srv-kubernetes
-              mountPath: /srv/kubernetes/
-              readOnly: true
             - name: etc-kubernetes
               mountPath: /etc/kubernetes
-              readOnly: true
-              # /usr/local/mount-from-host/bin is mounted to access kubectl / kubelet, for auto-detecting the Kubernetes version.
-              # You can omit this mount if you specify --version as part of the command.
-            - name: usr-bin
-              mountPath: /usr/local/mount-from-host/bin
               readOnly: true
             - name: etc-cni-netd
               mountPath: /etc/cni/net.d/
               readOnly: true
-            - name: opt-cni-bin
-              mountPath: /opt/cni/bin/
-              readOnly: true
       restartPolicy: Never
+      securityContext:
+        runAsGroup: 0
+        runAsUser: 0
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
         - name: var-lib-etcd
           hostPath:
-            path: "/var/lib/etcd"
+            path: /var/lib/etcd
         - name: var-lib-kubelet
           hostPath:
-            path: "/var/lib/kubelet"
+            path: /var/lib/kubelet
         - name: var-lib-kube-scheduler
           hostPath:
-            path: "/var/lib/kube-scheduler"
+            path: /var/lib/kube-scheduler
         - name: var-lib-kube-controller-manager
           hostPath:
-            path: "/var/lib/kube-controller-manager"
+            path: /var/lib/kube-controller-manager
         - name: etc-systemd
           hostPath:
-            path: "/etc/systemd"
+            path: /etc/systemd
         - name: lib-systemd
           hostPath:
-            path: "/lib/systemd"
-        - name: srv-kubernetes
-          hostPath:
-            path: "/srv/kubernetes"
+            path: /lib/systemd
         - name: etc-kubernetes
           hostPath:
-            path: "/etc/kubernetes"
-        - name: usr-bin
-          hostPath:
-            path: "/usr/bin"
+            path: /etc/kubernetes
         - name: etc-cni-netd
           hostPath:
-            path: "/etc/cni/net.d/"
-        - name: opt-cni-bin
-          hostPath:
-            path: "/opt/cni/bin/"
+            path: /etc/cni/net.d/
