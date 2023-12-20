@@ -11,6 +11,7 @@ func init() {
 	rootCmd.PersistentFlags().StringP("output", "o", "json", "Output format. One of table|json")
 	rootCmd.PersistentFlags().StringP("spec", "s", "cis", " spec name.  default: cis")
 	rootCmd.PersistentFlags().StringP("version", "v", "1.23", "spec version.  default: 1.23")
+	rootCmd.PersistentFlags().StringP("node", "n", "minikube", "node name.  default: minikube")
 }
 
 var rootCmd = &cobra.Command{
