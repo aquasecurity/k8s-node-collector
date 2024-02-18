@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -87,7 +88,11 @@ func CollectData(cmd *cobra.Command, target string) error {
 			nodeInfo[ci.Key] = &Info{Values: values}
 		}
 		nodeName := cmd.Flag("node").Value.String()
-		configVal, err := getValuesFromkubeletConfig(ctx, nodeName, *cluster)
+		nodeConfig, err := loadNodeConfig(ctx, *cluster, nodeName)
+		if err != nil {
+			return err
+		}
+		configVal, err := getValuesFromkubeletConfig(nodeConfig)
 		if err != nil {
 			return err
 		}
@@ -108,12 +113,7 @@ func CollectData(cmd *cobra.Command, target string) error {
 	return nil
 }
 
-func specByPlatfromVersion(platfrom string, version string) SpecVersion {
-	return platfromSpec[fmt.Sprintf("%s-%s", platfrom, platfrom)]
-}
-
-func getValuesFromkubeletConfig(ctx context.Context, nodeName string, cluster Cluster) (map[string]*Info, error) {
-	overrideConfig := make(map[string]*Info)
+func loadNodeConfig(ctx context.Context, cluster Cluster, nodeName string) (map[string]interface{}, error) {
 	data, err := cluster.clientSet.RESTClient().Get().AbsPath(fmt.Sprintf("/api/v1/nodes/%s/proxy/configz", nodeName)).DoRaw(ctx)
 	if err != nil {
 		return nil, err
@@ -123,6 +123,15 @@ func getValuesFromkubeletConfig(ctx context.Context, nodeName string, cluster Cl
 	if err != nil {
 		return nil, err
 	}
+	return nodeConfig, nil
+}
+
+func specByPlatfromVersion(platfrom string, version string) SpecVersion {
+	return platfromSpec[fmt.Sprintf("%s-%s", platfrom, platfrom)]
+}
+
+func getValuesFromkubeletConfig(nodeConfig map[string]interface{}) (map[string]*Info, error) {
+	overrideConfig := make(map[string]*Info)
 	values := nodeConfig["kubeletconfig"]
 	for k, v := range configMapper {
 		p := values
@@ -138,7 +147,12 @@ func getValuesFromkubeletConfig(ctx context.Context, nodeName string, cluster Cl
 			}
 		}
 		if found {
-			overrideConfig[k] = &Info{Values: []interface{}{p}}
+			switch r := p.(type) {
+			case bool:
+				overrideConfig[k] = &Info{Values: []interface{}{strconv.FormatBool(r)}}
+			default:
+				overrideConfig[k] = &Info{Values: []interface{}{r}}
+			}
 		}
 	}
 	return overrideConfig, nil
