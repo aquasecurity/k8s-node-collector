@@ -32,7 +32,7 @@ concurrency:
 jobs:
   verify-code:
     name: Verify code
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -60,7 +60,7 @@ jobs:
         run: go mod vendor
   tests:
     name: Run tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -82,7 +82,7 @@ jobs:
           files: ./coverage.txt
   e2e-testing:
     name: Run end to end testing
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
