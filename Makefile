@@ -15,9 +15,9 @@ test:
 	$(GOTEST) ./... 
 
 build:
-	cd ./cmd/node-collector && go build -o node-collector main.go 
+	go build -o node-collector ./cmd/node-collector/
 
 build-docker:
-	docker build -t ghcr.io/aquasecurity/node-collector:dev .
+	docker build -t ghcr.io/aquasecurity/node-collector:dev  -f build/node-collector/Dockerfile .
 
 .PHONY: install-req fmt lint tidy test imports .
