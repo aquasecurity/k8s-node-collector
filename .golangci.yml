@@ -8,7 +8,7 @@ linters:
   settings:
     gocritic:
       enabled-checks:
-      - importShadow
+        - importShadow
 run:
   timeout: 5m
   go: "1.24"
