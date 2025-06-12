@@ -75,7 +75,7 @@ func bzip2Compress(data []byte) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-	w.Close()
+	_ = w.Close()
 	return buf.Bytes(), nil
 }
 

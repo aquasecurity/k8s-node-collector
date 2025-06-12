@@ -1,7 +1,6 @@
 ---
+version: "2"
 linters:
-  disable:
-    - structcheck
   enable:
     - errorlint
     - gocritic
@@ -12,3 +11,4 @@ linters-settings:
       - importShadow
 run:
   timeout: 5m
+  go: "1.24"
