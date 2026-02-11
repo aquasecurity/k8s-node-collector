@@ -1,6 +1,6 @@
 ---
-version: 2
-go: 1.25
+version: "2"
+go: "1.25"
 linters:
   enable:
     - errorlint
