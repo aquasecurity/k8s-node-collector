@@ -91,7 +91,10 @@ func bzip2Compress(data []byte) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-	_ = w.Close()
+	err = w.Close()
+	if err != nil {
+		return []byte{}, err
+	}
 	return buf.Bytes(), nil
 }
 

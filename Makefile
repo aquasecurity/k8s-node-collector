@@ -19,4 +19,4 @@ build:
 build-docker:
 	docker build -t ghcr.io/aquasecurity/node-collector:dev -f ./build/node-collector/Dockerfile .
 
-.PHONY: install-req fmt lint tidy test imports build .
+.PHONY: install-req fmt lint tidy test imports build build-docker
