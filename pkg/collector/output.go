@@ -17,7 +17,10 @@ func printOutput(nodeData Node, output string, writer io.Writer) error {
 		if err != nil {
 			return err
 		}
-		fmt.Fprint(writer, string(data))
+		_, err = fmt.Fprint(writer, string(data))
+		if err != nil {
+			return err
+		}
 	case "table":
 		data := make([][]string, 0)
 		for key, ndata := range nodeData.Info {

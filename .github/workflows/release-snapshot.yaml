@@ -5,12 +5,12 @@ on:
   schedule:
     - cron: 0 0 * * *
 env:
-  GO_VERSION: 1.22.4
+  GO_VERSION: 1.25.7
 permissions: {}
 jobs:
   release-snapshot:
     name: Release unversioned snapshot
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       DOCKER_CLI_EXPERIMENTAL: enabled
     permissions:

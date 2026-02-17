@@ -1,14 +1,15 @@
 ---
+version: "2"
+
 linters:
-  disable:
-    - structcheck
   enable:
     - errorlint
     - gocritic
     - gosec
-linters-settings:
-  gocritic:
-    enabled-checks:
-      - importShadow
+  settings:
+    gocritic:
+      enabled-checks:
+        - importShadow
 run:
+  go: "1.25"
   timeout: 5m

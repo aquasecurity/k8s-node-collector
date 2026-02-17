@@ -22,9 +22,9 @@ on:
       - LICENSE
       - NOTICE
 env:
-  GO_VERSION: 1.22.4
-  KIND_VERSION: v0.11.1
-  KIND_IMAGE: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
+  GO_VERSION: 1.25.7
+  KIND_VERSION: v0.29.0
+  KIND_IMAGE: kindest/node:v1.33.1@sha256:050072256b9a903bd914c0b2866828150cb229cea0efe5892e2b644d5dd3b34f
 permissions: {}
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,7 +32,7 @@ concurrency:
 jobs:
   verify-code:
     name: Verify code
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -48,19 +48,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Verify Go code
-        uses: golangci/golangci-lint-action@v6.0.1
+        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
         with:
           args: --verbose
-          version: v1.57.2
-          skip-pkg-cache: true
-          skip-build-cache: true
+          version: v2.4
       - name: Verify YAML code
         uses: ibiqlik/action-yamllint@v3
       - name: Vendor Go modules
         run: go mod vendor
   tests:
     name: Run tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -104,20 +102,13 @@ jobs:
         with:
           version: v1.7.0
           args: release -f=goreleaser-e2e.yaml --snapshot --skip-publish --rm-dist
-      - name: Install kind and create cluster
-        run: >
-          curl -Lo ./kind https://kind.sigs.k8s.io/dl/${{ env.KIND_VERSION
-          }}/kind-linux-amd64
 
-          chmod +x ./kind
+      - name: Setup Kubernetes cluster (KIND)
+        uses: engineerd/setup-kind@v0.6.2
+        with:
+          version: ${{ env.KIND_VERSION }}
+          image: ${{ env.KIND_IMAGE }}
 
-          sudo mv ./kind /usr/local/bin/kind
-
-          kind create cluster
-
-          curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl
-
-          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       - name: Test connection to Kubernetes cluster
         run: |
           kubectl cluster-info
