@@ -51,9 +51,9 @@ func CollectData(cmd *cobra.Command) error {
 	}
 	cm := configParams(lp, shellCmd)
 	nodeCommands := cmd.Flag("node-commands").Value.String()
-	commands, err := GetNodesCommands(nodeCommands, cm, nodeType)
-	if len(commands) == 0 {
-		return fmt.Errorf("spec not found")
+	commands, err := loadNodeCommands(nodeCommands, cm, nodeType)
+	if err != nil {
+		return err
 	}
 	nodeInfo, err := ExecuteCommands(shellCmd, commands)
 	if err != nil {
@@ -86,6 +86,20 @@ func CollectData(cmd *cobra.Command) error {
 		return err
 	}
 	return nil
+}
+
+// loadNodeCommands reads the commands of the spec. A spec that cannot be read
+// is reported with the error that broke it, only a spec without any command for
+// this node is reported as missing.
+func loadNodeCommands(nodeCommands string, configMap map[string]string, nodeType string) ([]Command, error) {
+	commands, err := GetNodesCommands(nodeCommands, configMap, nodeType)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read node commands: %w", err)
+	}
+	if len(commands) == 0 {
+		return nil, fmt.Errorf("spec not found")
+	}
+	return commands, nil
 }
 
 func GetNodesCommands(nodeCommands string, configMap map[string]string, nodeType string) ([]Command, error) {
@@ -209,21 +223,71 @@ func mergeConfigValues(configValues map[string]*Info, overrideConfig map[string]
 	return configValues
 }
 
+// procListCommand lists every process as "<pid> <command line>". -a is used
+// over -l because procps-ng prints the truncated process name for -l, while
+// busybox prints the command line for both.
+const procListCommand = `pgrep -a "" 2>/dev/null`
+
 func binLookup(binsNames []string, defaultBinName string, sh Shell) string {
 	if len(binsNames) == 0 {
 		return ""
 	}
+	procs, err := sh.Execute(procListCommand)
+	if err != nil {
+		return defaultBinName
+	}
+	// Shell.Execute joins the lines of the output with commas.
+	procList := strings.Split(procs, ",")
 	for _, bin := range binsNames {
-		cmd := fmt.Sprintf(`pgrep -l "" | grep '%s' | awk '{print $2}' | awk 'NR==1' 2>/dev/null`, bin)
-		name, err := sh.Execute(cmd)
-		if err != nil {
-			return defaultBinName
-		}
-		if strings.TrimSpace(name) != "" {
-			return filepath.Base(name)
+		if name := runningBin(procList, bin); name != "" {
+			return name
 		}
 	}
 	return defaultBinName
+}
+
+// runningBin returns the base name of the executable of the first process in
+// procList that runs bin, or an empty string when no process does.
+//
+// bin is matched against whole arguments instead of against a substring of the
+// command line. The collector shares the PID namespace of the host, so a
+// substring match reports arbitrary host processes as a Kubernetes component:
+// the "proxy" entry of the proxy binaries matches both a dhcpcd worker titled
+// "dhcpcd: [privileged proxy] ens18 [ip4] [ip6]" and "/usr/local/sbin/haproxy".
+// bin may name a sub command as well ("hyperkube proxy"), every word then has
+// to match its own argument.
+func runningBin(procList []string, bin string) string {
+	want := strings.Fields(bin)
+	if len(want) == 0 {
+		return ""
+	}
+	for _, proc := range procList {
+		fields := strings.Fields(proc)
+		if len(fields) < len(want)+1 {
+			continue
+		}
+		// a record always starts with the pid, anything else is a fragment of
+		// a command line that contained the comma used to join the lines
+		if _, err := strconv.Atoi(fields[0]); err != nil {
+			continue
+		}
+		args := fields[1:]
+		name := filepath.Base(args[0])
+		if name != want[0] {
+			continue
+		}
+		matched := true
+		for i := 1; i < len(want); i++ {
+			if args[i] != want[i] {
+				matched = false
+				break
+			}
+		}
+		if matched {
+			return name
+		}
+	}
+	return ""
 }
 
 func configLookup(configNames []string, defaultConfigName string, sh Shell) string {
