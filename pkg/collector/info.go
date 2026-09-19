@@ -51,7 +51,7 @@ func LoadKubeletMapping(kubletConfigMapping string) (map[string]string, error) {
 	return mapping, nil
 }
 
-// SpecInfo spec info with require comand to collect
+// SpecInfo spec info with require command to collect
 type SpecInfo struct {
 	Version  string    `yaml:"version"`
 	Name     string    `yaml:"name"`
@@ -76,7 +76,7 @@ type Node struct {
 	Info       map[string]*Info  `json:"info"`
 }
 
-// Info comand output result
+// Info command output result
 type Info struct {
 	Values interface{} `json:"values"`
 }
@@ -115,7 +115,7 @@ type Params struct {
 	Binaries          []string `yaml:"bins,omitempty"`
 	DefaultBinaries   string   `yaml:"defaultbins,omitempty"`
 	Services          []string `yaml:"svc,omitempty"`
-	DefalutServices   string   `yaml:"defaultsvc,omitempty"`
+	DefaultServices   string   `yaml:"defaultsvc,omitempty"`
 	CAFile            []string `yaml:"cafile,omitempty"`
 	DefaultCAFile     string   `yaml:"defaultcafile,omitempty"`
 }

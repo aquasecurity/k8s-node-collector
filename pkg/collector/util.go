@@ -23,7 +23,7 @@ func StringToArray(output string, delimiter string) []interface{} {
 	return filterdParts
 }
 
-// SanitizeString snitize string from special characters
+// SanitizeString sanitizes string from special characters
 func SanitizeString(output string, replaceable map[string]string) string {
 	for key, toReplace := range replaceable {
 		output = strings.ReplaceAll(output, key, toReplace)

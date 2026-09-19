@@ -16,7 +16,7 @@ func init() {
 var k8sCmd = &cobra.Command{
 	Use:   subCommandK8s,
 	Short: "k8s-node-collector extract file system info from cluster Node",
-	Long:  `A tool which provide a way to extract k8s info which is not accessible via apiserver from node cluster based on pre-define commands`,
+	Long:  `A tool which provides a way to extract k8s info which is not accessible via apiserver from node cluster based on pre-defined commands`,
 	RunE: func() func(cmd *cobra.Command, args []string) error {
 		return func(cmd *cobra.Command, args []string) error {
 			return collector.CollectData(cmd)
