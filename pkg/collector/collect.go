@@ -260,7 +260,7 @@ func configData(param Params, sh Shell, binName string, paramMaps map[string]str
 	if dataDir != "" {
 		paramMaps[fmt.Sprintf("$%s.datadirs", binName)] = dataDir
 	}
-	services := configLookup(param.Services, param.DefalutServices, sh)
+	services := configLookup(param.Services, param.DefaultServices, sh)
 	if services != "" {
 		paramMaps[fmt.Sprintf("$%s.svc", binName)] = services
 	}

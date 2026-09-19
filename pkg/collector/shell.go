@@ -20,13 +20,13 @@ var (
 	}
 )
 
-// Shell command interface to preform shell exec commands
+// Shell command interface to perform shell exec commands
 type Shell interface {
 	Execute(commandArgs string) (string, error)
 	FindNodeType() (string, error)
 }
 
-// NewShellCmd instansiate new shell command
+// NewShellCmd instantiate new shell command
 func NewShellCmd() Shell {
 	return &cmd{}
 }
@@ -34,7 +34,7 @@ func NewShellCmd() Shell {
 type cmd struct {
 }
 
-// Execute execute a shell command and retun it output or error
+// Execute execute a shell command and return it output or error
 func (e *cmd) Execute(commandArgs string) (string, error) {
 	cm := exec.Command(shellCommand, "-c", commandArgs)
 	output, err := cm.CombinedOutput()
