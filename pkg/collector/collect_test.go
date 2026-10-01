@@ -206,17 +206,51 @@ func TestNodeCommamnd(t *testing.T) {
 	tests := []struct {
 		name             string
 		commandsFilePath string
+		nodeType         string
 		want             []Command
 	}{
 		{
 			name:             "k8s version",
 			commandsFilePath: "./testdata/fixture/single-check.yaml",
+			nodeType:         "master",
 			want: []Command{
 				{
 					Key:      "kubeAPIServerSpecFilePermission",
 					Title:    "API server pod specification file permissions",
 					NodeType: "master",
 					Audit:    "stat -c %a $apiserver.confs",
+				},
+			},
+		},
+		{
+			name:             "master takes every command",
+			commandsFilePath: "./testdata/fixture/mixed-node-types.yaml",
+			nodeType:         "master",
+			want: []Command{
+				{
+					Key:      "kubeAPIServerSpecFilePermission",
+					Title:    "API server pod specification file permissions",
+					NodeType: "master",
+					Audit:    "stat -c %a $apiserver.confs",
+				},
+				{
+					Key:      "kubeletConfFilePermission",
+					Title:    "kubelet configuration file permissions",
+					NodeType: "worker",
+					Audit:    "stat -c %a $kubelet.confs",
+				},
+			},
+		},
+		{
+			name:             "worker takes only the worker commands",
+			commandsFilePath: "./testdata/fixture/mixed-node-types.yaml",
+			nodeType:         "worker",
+			want: []Command{
+				{
+					Key:      "kubeletConfFilePermission",
+					Title:    "kubelet configuration file permissions",
+					NodeType: "worker",
+					Audit:    "stat -c %a $kubelet.confs",
 				},
 			},
 		},
@@ -228,7 +262,7 @@ func TestNodeCommamnd(t *testing.T) {
 			assert.NoError(t, err)
 			commands, err := CompressAndEncode(fd)
 			assert.NoError(t, err)
-			got, err := GetNodesCommands(string(commands), map[string]string{}, "master")
+			got, err := GetNodesCommands(string(commands), map[string]string{}, tt.nodeType)
 			assert.NoError(t, err)
 			assert.True(t, reflect.DeepEqual(got, tt.want))
 		})

@@ -1,0 +1,10 @@
+---
+commands:
+    - audit: stat -c %a $apiserver.confs
+      key: kubeAPIServerSpecFilePermission
+      title: API server pod specification file permissions
+      nodeType: master
+    - audit: stat -c %a $kubelet.confs
+      key: kubeletConfFilePermission
+      title: kubelet configuration file permissions
+      nodeType: worker

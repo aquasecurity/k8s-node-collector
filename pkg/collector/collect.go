@@ -106,13 +106,10 @@ func GetNodesCommands(nodeCommands string, configMap map[string]string, nodeType
 			return nil, err
 		}
 		for _, c := range specInfo.Commands {
-			if nodeType == "master" {
-				commands = append(commands, c)
-			} else if c.NodeType == nodeType {
+			if nodeType == "master" || c.NodeType == nodeType {
 				commands = append(commands, c)
 			}
 		}
-		commands = specInfo.Commands
 	}
 	return commands, nil
 }
